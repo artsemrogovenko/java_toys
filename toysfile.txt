@@ -1,0 +1,6 @@
+AAA 5 2
+BBB 2 1
+CCC 5 1
+FFF 2 2
+JJJ 4 2
+GGG 5 2

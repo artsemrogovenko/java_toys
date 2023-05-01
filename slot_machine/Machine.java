@@ -1,11 +1,12 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
-import java.util.Stack;
 
 public class Machine extends Toy {
     /* игрушки в наличии */
     protected static LinkedList<Toy> stock = new LinkedList<>();
     /* игрушки готовые к продаже */
-    protected static Stack<String> raffle = new Stack<>();
+    protected static LinkedList<String> raffle = new LinkedList<>();
 
     /* проверка на наличие */
     public static boolean check_toy(String nameToy) {
@@ -47,16 +48,68 @@ public class Machine extends Toy {
                 index++;
             }
         }
-        if (check_toy(data[0])) { // если такой игрушки еще нет
-            try {
+
+        try {
+            if (input[0].isEmpty()) {
+                throw new Exception("пустая строка");
+            }
+            if (Integer.parseInt(data[2]) <= 0) {
+                throw new Exception("количество должно быть больше нуля");
+            }
+
+            if (check_toy(data[0])) { // если такой игрушки еще нет
                 stock.add(new Toy(data[0], Integer.parseInt(data[1]), Integer.parseInt(data[2])));
                 System.out.println("успешно");
-            } catch (Exception e) {
-                System.out.println("-! Ошибка ввода !-");
+
+            } else {
+                System.out.printf("%s игрушка уже есть\n", data[0]);
             }
-            
-        } else {
-            System.out.printf("%s игрушка уже есть\n", data[0]);
+
+        } catch (Exception e) {
+            System.out.printf("-! Ошибка добавления %s !- \n", e.getMessage());
         }
     }
+
+    /* начало игры */
+    public static void startGame() {
+        if (raffle.size() > 0) {
+            unpacking(raffle);
+        } else {
+            System.out.println("автомат пуст");
+        }
+    }
+
+
+    // получает из очереди
+    private static void unpacking(LinkedList<String> list) {
+        if (list.size() > 0) {
+            // для отладки
+            /* for (String s : list) {
+                System.out.println(s);
+            } */
+            String name = list.getFirst();
+            for (Toy toy : stock) {
+                if (toy.getName().equals(name)) {
+                    toy.decrease();
+                    FilesOp.exportFile("./history.log", getinfo(toy));
+                    System.out.println("Вы получили " + toy.getName());
+                    list.removeFirst();
+                    if (toy.getCount() == 0) {
+                        stock.remove(toy);
+                    }
+                    break;
+                }
+            }
+        } else {
+            stock.poll();
+        }
+    }
+    
+    private static String getinfo(Toy item) {
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        String date = formatDate.format(new Date());
+        return String.format("id %d %s вероятность=%s \t %s",item.getId(),item.getName(),item.getWeight(),date);
+    }
+
+
 }

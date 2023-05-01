@@ -23,7 +23,7 @@ public class Main {
                 case "1": Admin.add_new(); break;
                 case "2": Machine.show_stock();break;
                 case "3": Admin.edit_fortune();break;
-                case "4": Sorting.start();break;
+                case "4": Machine.startGame();break;
                 case "6": Admin.deleteToy();break;
                 case "7": FilesOp.getBucket(toyslist);break;
                 case "0": loop = false; break;

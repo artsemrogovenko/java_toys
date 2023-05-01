@@ -20,6 +20,7 @@ public class FilesOp extends Machine{
                 add_toy(line.replaceAll(";"," ").split(" "));  
                 line = reader.readLine();
             }
+            Sorting.start();
             reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("Не удается найти указанный файл, был автоматически создан");

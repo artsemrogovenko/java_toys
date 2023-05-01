@@ -10,6 +10,7 @@ public class Admin extends Machine {
         if (!check_toy(nameToy)) {
             stock.remove(selectToy(nameToy));
             System.out.println("игрушка удалена");
+            Sorting.start();
         }
         else{
             System.out.println("такого имени нет");
@@ -25,6 +26,7 @@ public class Admin extends Machine {
                 System.out.println("Введите шанс выпадения");
                 selectToy(nameToy).setWeight(Integer.parseInt(admScanner.nextLine().replaceAll("\\s", "")));
                 System.out.println("успешно");
+                Sorting.start();
             } else {
                 System.out.println("нет такой игрушки");
             }
@@ -39,6 +41,9 @@ public class Admin extends Machine {
         System.out.println("Введите \"имя\" \"шанс выпадения в %\" \"количество шт.\"\nНапример: lego 20% 5 ");
         String[] input = admScanner.nextLine().split(" ");
         add_toy(input);
+        if(stock.size()>0){
+            Sorting.start();
+        }
     }
 
 }
